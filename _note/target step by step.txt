@@ -1,0 +1,17 @@
+7. 
+6. workflow (spec, operation)
+5. ERP Route
+4. add BOM (list of Product)
+3. add workorder (refer to the Product)
+
+
+ORM
+2. add Product (CRUD)
+modeling
+1. make it run --ok
+    python -m venv venv
+    source venv/bin/activate  # Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+        # pip install "fastapi[all]" sqlmodel
+
+    python main.py

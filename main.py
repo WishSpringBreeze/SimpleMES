@@ -1,29 +1,33 @@
-from fastapi import FastAPI, Depends, HTTPException
-from sqlmodel import Session, select
-from typing import Annotated
+# main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 
-from database import engine, get_session, create_db_and_tables
-from models import WorkOrder
-from schemas import WorkOrderCreate, WorkOrderRead
+from database import create_db_and_tables, engine
+from routers import products # 导入 products 路由器
 
-# 创建表 (应用启动时)
-create_db_and_tables()
+app = FastAPI(title="Simple MES", version="0.1.0")
 
-app = FastAPI()
+# CORS 配置，允许前端访问
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # 在生产环境中应替换为具体的前端域名
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# 包含产品相关的路由
+app.include_router(products.router)
+
+# 应用启动时创建数据库表
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
 
-@app.post("/workorders/", response_model=WorkOrderRead, status_code=201)
-def create_work_order(work_order: WorkOrderCreate, session: Annotated[Session, Depends(get_session)]):
-    db_work_order = WorkOrder.from_orm(work_order)
-    session.add(db_work_order)
-    session.commit()
-    session.refresh(db_work_order)
-    return db_work_order
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Simple MES API. Visit /docs for documentation."}
 
-@app.get("/workorders/", response_model=list[WorkOrderRead])
-def read_work_orders(session: Annotated[Session, Depends(get_session)]):
-    work_orders = session.exec(select(WorkOrder)).all()
-    return work_orders
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
