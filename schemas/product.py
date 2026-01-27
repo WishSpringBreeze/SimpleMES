@@ -8,7 +8,6 @@ from typing import List, Optional
 
 class ProductBase(SQLModel):
     name: str
-    sku: str
     description: Optional[str] = None
 
 class ProductCreate(ProductBase):
@@ -20,3 +19,7 @@ class ProductRead(ProductBase):
 
     class Config:
         orm_mode = True
+
+class ProductUpdate(ProductBase):
+    # 更新时，客户端必须提供他们上次读取到的 version
+    version: int
