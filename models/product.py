@@ -7,3 +7,4 @@ class Product(SQLModel, table=True):
     name: str = Field(index=True, unique=True)
     description: Optional[str] = None
     version: int = Field(default=1, index=True)
+    productType: Optional[str] = None

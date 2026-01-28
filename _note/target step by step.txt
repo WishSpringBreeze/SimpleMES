@@ -16,3 +16,9 @@ modeling
 
     python main.py
     uvicorn main:app
+
+
+pip install alembic
+    alembic --version
+alembic init alembic
+alembic revision --autogenerate -m "initial migration"
