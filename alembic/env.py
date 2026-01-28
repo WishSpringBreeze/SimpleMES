@@ -6,7 +6,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+
+
 from sqlmodel import SQLModel
+from models import *
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -48,6 +52,7 @@ def run_migrations_offline() -> None:
     context.configure(
         url=url,
         target_metadata=target_metadata,
+        compare_type=True,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
@@ -64,8 +69,26 @@ def run_migrations_online() -> None:
 
     """
 
-    from database import engine
-    connectable = engine
+    # from database import engine
+    # connectable = engine
+
+    # 从 alembic.ini 获取配置，但我们会覆盖它
+    configuration = config.get_section(config.config_ini_section)
+
+    # 从环境变量或 alembic.ini 获取数据库 URL
+    # 我们假设你的 DATABASE_URL 在 alembic.ini 里或者在环境变量里
+    db_url = configuration.get('sqlalchemy.url') or os.getenv("DATABASE_URL")
+    if not db_url:
+         # 如果都找不到，抛出一个明确的错误
+         raise ValueError("DATABASE_URL not configured in alembic.ini or environment variables.")
+
+    # 创建引擎时，为 SQLite 添加 connect_args 来禁用事务
+    connectable = engine_from_config(
+        configuration, # 使用配置字典
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+        connect_args={"check_same_thread": False} # 添加这个参数
+    )
 
     # connectable = engine_from_config(
     #     config.get_section(config.config_ini_section, {}),

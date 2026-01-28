@@ -6,7 +6,7 @@ from typing import List
 from database import get_session
 from models import Product
 from schemas import ProductBase, ProductCreate, ProductRead
-from crud import create_item, get_item, get_items, get_item_by_field, update_item, delete_item, update_item_with_version
+from crud import create_item, get_item, get_items, get_item_by_field, update_item, delete_item, update_item_with_change_count
 from schemas.product import ProductUpdate
 
 router = APIRouter(
@@ -118,7 +118,7 @@ def update_product_by_name(
 
     try:
         # 注意：我们传入的是从数据库查到的 product_to_update.id
-        updated_product = update_item_with_version(session, Product, product_to_update.id, product_in)
+        updated_product = update_item_with_change_count(session, Product, product_to_update.id, product_in)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
         

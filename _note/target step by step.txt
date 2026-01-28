@@ -1,14 +1,15 @@
 7. 
 6. workflow (spec, operation)
 5. ERP Route
-4. add BOM (list of Product)
-3. add workorder (refer to the Product)
 
-version
-ORM
+3. add BOM (list of Product)
+-----------------------------------------
+    add new column: alembic
+    version -- not well, to check again later *************************************************
+    ORM
 2. add Product (CRUD)
 modeling
-1. make it run --ok
+1. make it run
     python -m venv venv
     source venv/bin/activate  # Windows: venv\Scripts\activate
     pip install -r requirements.txt
@@ -20,5 +21,11 @@ modeling
 
 pip install alembic
     alembic --version
+alembic stamp base
+
 alembic init alembic
+
 alembic revision --autogenerate -m "initial migration"
+    update file by add: import sqlmodel
+alembic upgrade head
+    alembic downgrade -1
