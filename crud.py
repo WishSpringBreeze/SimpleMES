@@ -1,7 +1,7 @@
 # crud.py
 from sqlmodel import SQLModel, Session, select
 from typing import List, Optional, Type, TypeVar
-import models
+import model
 
 # 定义一个泛型类型，代表我们的模型类
 ModelType = TypeVar("ModelType", bound=SQLModel)

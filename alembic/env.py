@@ -10,7 +10,7 @@ from alembic import context
 
 
 from sqlmodel import SQLModel
-from models import *
+from model import *
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 

@@ -1,9 +1,10 @@
 Key Concerns:
 日志，归档，高并发，Load Balance
+@Transaction
 ORM
 modeling audit trail
 BR (modeling code change anytime)
 	FastAPI依赖注入（Dependencies）
 DB: Migration Tools (Alembic)
 
-并发（version)
+并发（version）
