@@ -15,6 +15,15 @@ class BaseModel(SQLModel):
 
     version_id: int = Field(
         default=1,
-        sa_column=Column(Integer, nullable=False),
-        sa_column_kwargs={"version_id_col": True}
+        sa_column=Column(Integer, nullable=False)
     )
+
+
+
+
+
+
+from sqlalchemy import event
+@event.listens_for(BaseModel, "before_update", propagate=True)
+def receive_before_update(mapper, connection, target):
+    target.version_id += 1
